@@ -1,0 +1,15 @@
+{
+  "name": "@aipy-pro/token-usage-analyzer",
+  "version": "1.0.0",
+  "description": "AiPy Token Usage Analyzer Extension",
+  "author": "aipy-pro",
+  "main": "server.js",
+  "private": true,
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.4"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "type": "module"
+}

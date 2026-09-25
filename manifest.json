@@ -1,0 +1,43 @@
+{
+  "dxt_version": "0.1",
+  "name": "@aipy-pro/token-usage-analyzer",
+  "display_name": "Token 用量分析器",
+  "version": "1.0.1",
+  "description": "统计 AiPy 本地历史任务的 Token 用量：input/output 比率、缓存命中率、单任务消耗排行，支持任务完成后自动生成用量简报。",
+  "author": {
+    "name": "AiPy 章鱼哥"
+  },
+  "icon": "icon.svg",
+  "server": {
+    "type": "node",
+    "entry_point": "server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/server.js"
+      ],
+      "env": {}
+    }
+  },
+  "keywords": [
+    "conversation-tool",
+    "token",
+    "usage",
+    "统计",
+    "输入输出比",
+    "缓存命中率",
+    "成本分析"
+  ],
+  "tools": [
+    {
+      "name": "analyze_token_usage",
+      "description": "统计 AiPy 历史任务的 Token 用量，返回 input/output 比率、缓存命中率、任务消耗排行"
+    },
+    {
+      "name": "task_token_brief",
+      "description": "生成指定任务（或最近任务）的 Token 用量简报"
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://www.aipyaipy.com/"
+}
