@@ -2,7 +2,7 @@
   "dxt_version": "0.1",
   "name": "@aipy-pro/token-usage-analyzer",
   "display_name": "Token 用量分析器",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "统计 AiPy 本地历史任务的 Token 用量：input/output 比率、缓存命中率、单任务消耗排行，支持任务完成后自动生成用量简报。",
   "author": {
     "name": "AiPy 章鱼哥"
