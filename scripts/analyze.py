@@ -43,8 +43,23 @@ def open_db():
     con = sqlite3.connect(str(tmp))
     con.row_factory = sqlite3.Row
     return con
-def collect(con, task_id=None, latest=False):
+def collect(con, task_id=None, latest=False, current=False):
     cur = con.cursor()
+    if current:
+        # 按当前工作目录自动识别当前对话任务
+        import os
+        wd = os.getcwd()
+        cur.execute("SELECT * FROM task WHERE workdir = ? ORDER BY create_time DESC LIMIT 1", (wd,))
+        row = cur.fetchone()
+        if row:
+            task_id = row["id"]
+        else:
+            # 回退：取最近一个有 LLM 调用的任务
+            cur.execute("""SELECT t.* FROM task t WHERE t.id IN
+                (SELECT DISTINCT task_id FROM task_event WHERE usage IS NOT NULL AND usage != '{}')
+                ORDER BY t.create_time DESC LIMIT 1""")
+            row = cur.fetchone()
+            task_id = row["id"] if row else None
     if task_id:
         cur.execute("SELECT * FROM task WHERE id = ?", (task_id,))
     elif latest:
@@ -155,12 +170,13 @@ def main():
     ap = argparse.ArgumentParser(description="AiPy Token 用量分析器")
     ap.add_argument("--task", help="指定任务 ID")
     ap.add_argument("--latest", action="store_true", help="只分析最近一个任务")
+    ap.add_argument("--current", action="store_true", help="分析当前对话任务（按工作目录识别）")
     ap.add_argument("--json", action="store_true", help="输出 JSON 格式")
     ap.add_argument("--out", help="同时保存结果到指定文件")
     args = ap.parse_args()
     con = open_db()
     try:
-        per_task, tot = collect(con, task_id=args.task, latest=args.latest)
+        per_task, tot = collect(con, task_id=args.task, latest=args.latest, current=args.current)
     finally:
         con.close()
     if not per_task:
